@@ -19,8 +19,8 @@ public class InitDriver {
         capabilities.setCapability("automationName","Appium");
         capabilities.setCapability("appPackage","org.wikipedia");
         capabilities.setCapability("appActivity","org.wikipedia.main.MainActivity");
-        capabilities.setCapability("appValue","D:\\Git\\JavaAppiumAutomation\\apks\\org.wikipedia_2.7.50433-r-2023-03-13_50433.apk");
-        capabilities.setCapability("noReset", "true");
+        capabilities.setCapability("appValue","D:\\Git\\appiumTestProject\\apks\\org.wikipedia_2.7.50433-r-2023-03-13_50433.apk");
+        capabilities.setCapability("noReset", true);
 
         android = new AndroidDriver(new URL(appiumURL), capabilities);
     }

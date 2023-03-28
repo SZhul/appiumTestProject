@@ -16,7 +16,6 @@ public class FirstTests extends InitDriver {
         mainPageObject = new MainPageObject(android);
     }
 
-
     @Test
     public void listTest() {
         mainPageObject.waitForElementAndClick(
@@ -47,11 +46,12 @@ public class FirstTests extends InitDriver {
                 By.xpath("//*[contains(@text, 'Java (programming language)')]"),
                 "не найден результат в строке поиска");
         WebElement element = mainPageObject.waitForElementPresent(
-                By.className("android.widget.TextView"),
+                By.xpath("//android.view.ViewGroup[@resource-id='org.wikipedia:id/page_contents_container']/*/*/*/*/*"),
                 "не получается найти заголовок",
                 15
         );
         String header = element.getAttribute("text");
+        System.out.println(header);
         Assertions.assertEquals(
                 "Java (programming language)", header,
                 "сравниваемые значения не эквивалентны");

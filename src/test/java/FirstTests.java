@@ -290,6 +290,13 @@ public class FirstTests extends InitDriver {
                 "Не удается ввести текст в поле ввода логина");
 
         String searchLocator = "//*[@resource-id='org.wikipedia:id/search_results_list']/*/*[@resource-id='org.wikipedia:id/results_text']";
+
+        mainPageObject.waitForElementPresent(
+                By.xpath(searchLocator),
+                "не удалось найти элемент для ожидания",
+                10
+        );
+
         mainPageObject.assertElementWithOnePresent(By.xpath(searchLocator), "обнаружены элементы на странице по запросу " + valueToSearchLine);
     }
 

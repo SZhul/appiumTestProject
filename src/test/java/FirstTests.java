@@ -1,5 +1,7 @@
 import lib.InitDriver;
-import lib.MainPageObject;
+import lib.ui.ArticlePageObject;
+import lib.ui.MainPageObject;
+import lib.ui.SearchPageObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,11 +13,65 @@ import java.time.Duration;
 import java.util.List;
 
 public class FirstTests extends InitDriver {
+
     MainPageObject mainPageObject;
+
     @BeforeEach
     protected void setUp() throws Exception{
         super.setUp();
         mainPageObject = new MainPageObject(android);
+    }
+
+
+    @Test
+    public void testSearch()
+    {
+        SearchPageObject searchPageObject = new SearchPageObject(android);
+
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Selenium");
+        searchPageObject.waitForSearchResult("Testing framework for web applications");
+    }
+
+    @Test
+    public void cancelSearchTest()
+    {
+        SearchPageObject searchPageObject = new SearchPageObject(android);
+
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Appium");
+        searchPageObject.waitForCancelSearchButton();
+        searchPageObject.cancelSearchAndClearInput();
+        searchPageObject.waitForCancelSearchButtonNotPresent();
+    }
+
+    @Test
+    public void testCompareArticleTitle()
+    {
+        SearchPageObject searchPageObject = new SearchPageObject(android);
+
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Selenium");
+        searchPageObject.waitForSearchResultAndClick("Testing framework for web applications");
+
+        ArticlePageObject articlePageObject = new ArticlePageObject(android);
+
+        Assertions.assertEquals(
+                "Selenium (software)", articlePageObject.getArticleTitle(),
+                "сравниваемые значения не эквивалентны");
+    }
+
+    @Test
+    public void TestSwipeArticle() {
+        SearchPageObject searchPageObject = new SearchPageObject(android);
+
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Selenium");
+        searchPageObject.waitForSearchResultAndClick("Testing framework for web applications");
+
+        ArticlePageObject articlePageObject = new ArticlePageObject(android);
+        articlePageObject.waitForTitleElement();
+        articlePageObject.swipeToElement();
     }
 
     @Test
@@ -32,50 +88,6 @@ public class FirstTests extends InitDriver {
         for (WebElement e : elements) {
             Assertions.assertTrue(e.getText().toLowerCase().contains("java"), "message is " + e.getText());
         }
-    }
-
-    @Test
-    public void testCompareArticleTitle()
-    {
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "не найден поиск");
-        mainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Java",
-                "Не удается ввести текст в поле ввода логина");
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Java (programming language)')]"),
-                "не найден результат в строке поиска");
-        WebElement element = mainPageObject.waitForElementPresent(
-                By.xpath("//android.view.ViewGroup[@resource-id='org.wikipedia:id/page_contents_container']/*/*/*/*/*"),
-                "не получается найти заголовок",
-                15
-        );
-        String header = element.getAttribute("text");
-        System.out.println(header);
-        Assertions.assertEquals(
-                "Java (programming language)", header,
-                "сравниваемые значения не эквивалентны");
-    }
-
-    @Test
-    public void TestSwipeArticle() {
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "не найден поиск");
-        mainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Java",
-                "Не удается ввести текст в поле ввода логина");
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Java (programming language)')]"),
-                "не найден результат в строке поиска");
-        mainPageObject.waitForElementPresent(
-                By.className("android.widget.TextView"),
-                "не получается найти заголовок",
-                15
-        );
     }
 
     @Test
@@ -102,44 +114,6 @@ public class FirstTests extends InitDriver {
     }
 
 
-    @Test
-    public void testSearch()
-    {
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "не найден поиск");
-        mainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Java",
-                "Не удается ввести текст в поле ввода логина");
-        mainPageObject.waitForElementPresent(
-                By.xpath("//*[@text='Java (programming language)']"),
-                "cannot find java",
-                15);
-    }
-
-    @Test
-    public void cancelSearchTest()
-    {
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "не найден поиск");
-        mainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                "java",
-                "не вводится текст в поисковую строку"
-                , 5);
-        mainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "не найдена кнопка очистки строки");
-        mainPageObject.waitForElementAndClick(
-                By.className("android.widget.ImageButton"),
-                "не найдена кнопка возвращения назад");
-        mainPageObject.waitForElementNotPresent(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "крестик очистки строки остался на странице",
-                5);
-    }
 
     @Test
     public void clearTest(){

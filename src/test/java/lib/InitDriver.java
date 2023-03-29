@@ -15,7 +15,7 @@ public class InitDriver {
 
 
 
-    @BeforeEach
+
     protected void setUp() throws Exception
     {
         DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -31,6 +31,7 @@ public class InitDriver {
         android = new AndroidDriver(new URL(appiumURL), capabilities);
 
     }
+
     @AfterEach
     protected void tearDown()
     {

@@ -1,7 +1,5 @@
 import lib.InitDriver;
-import lib.ui.ArticlePageObject;
-import lib.ui.MainPageObject;
-import lib.ui.SearchPageObject;
+import lib.ui.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,6 +73,44 @@ public class FirstTests extends InitDriver {
     }
 
     @Test
+    public void saveFirstArticle(){
+        SearchPageObject searchPageObject = new SearchPageObject(android);
+
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Javascript");
+        searchPageObject.waitForSearchResultAndClick("JavaScript");
+
+        ArticlePageObject articlePageObject = new ArticlePageObject(android);
+
+        articlePageObject.waitForTitleElement();
+        String article_title = articlePageObject.getArticleTitle();
+        System.out.println(article_title);
+        String name_of_folder = "Appium lessons";
+        articlePageObject.saveArticleToMyList(name_of_folder);
+        searchPageObject.clickArrowButton();
+        searchPageObject.clickArrowButton();
+
+        NavigationUI navigationUI = new NavigationUI(android);
+
+        navigationUI.clickSaveOnMainPage();
+
+        SaveFoldersPageObject saveFoldersPageObject = new SaveFoldersPageObject(android);
+
+        saveFoldersPageObject.clickToFolderInSavePage(name_of_folder);
+
+        saveFoldersPageObject.getArticleTitleInSavedFolder();
+
+        saveFoldersPageObject.checkArticleNotDelete(article_title);
+        saveFoldersPageObject.swipeByArticleToDelete(article_title);
+        saveFoldersPageObject.checkArticleDeleteAfterSwipe(article_title);
+        saveFoldersPageObject.checkEmptyArticlePlaceholder();
+        saveFoldersPageObject.clickToKebab();
+        saveFoldersPageObject.clickToDeleteFolder();
+        saveFoldersPageObject.clickOkAfterDelete();
+        saveFoldersPageObject.GetEmptyFolderPlaceholderTitle();
+    }
+
+    @Test
     public void listTest() {
         mainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
@@ -135,93 +171,9 @@ public class FirstTests extends InitDriver {
                 "не найдена кнопка возвращения назад");
     }
 
-    @Test
-    public void saveFirstArticle(){
-        String valueToStartSeach = "Search Wikipedia";
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, '" + valueToStartSeach +"')]"),
-                "не найден поиск");
-        mainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, '" + valueToStartSeach + "')]"),
-                "Java",
-                "Не удается ввести текст в поле ввода логина");
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Java (programming language)')]"),
-                "cannot find java",
-                15);
-        mainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/page_save"),
-                "Не могу найти элемент Save на странице Java",
-                5
-        );
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'ADD TO LIST')]"),
-                "не появилось меню с Add to List",
-                5
-        );
-        mainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/text_input"),
-                "Appium lessons",
-                "не удалось ввести сообщение в поле для saved list",
-                5
-        );
-        mainPageObject.waitForElementAndClick(
-                By.id("android:id/button1"),
-                "не удалось сохранить значения",
-                5
-        );
 
-        String arrowToBack = "Navigate up";
 
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageButton[@content-desc='" + arrowToBack + "']"),
-                "не удалось нажать на стрелочку",
-                5
-        );
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageButton[@content-desc='" + arrowToBack + "']"),
-                "не удалось нажать на стрелочку",
-                5
-        );
-        mainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/nav_tab_reading_lists"),
-                "не удалось нажать на saved на стартовом экране",
-                5
-        );
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Appium lessons')]"),
-                "не удалось перейти в список сохраненных статей",
-                5
-        );
-        mainPageObject.swipeToLeft(
-                By.xpath("//*[@text='Java (programming language)']"),
-                "не удалось найти элемент для свайпа");
-        mainPageObject.waitForElementPresent(
-                By.xpath("//*[@text='You have no articles added to this list.']"),
-                "не обнаружен плейсхолдер о пустой странице",
-                5
-        );
-        mainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/item_overflow_menu"),
-                "не найдена кнопка бургер-меню",
-                5
-        );
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[@text='Delete list']"),
-                "не найдена кнопка Delete для удаления категории сохраненных страниц",
-                5
-        );
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[@text='OK']"),
-                "Не получилось нажать на ОК при удалении категории сохраненных страниц",
-                5
-        );
-        mainPageObject.waitForElementPresent(
-                By.id("org.wikipedia:id/empty_title"),
-                "Не найден плейсхолдер, обозначающий отсутствие сохраненных статей",
-                5
-        );
-    }
+
 
     @Test
     public void assertTest(){

@@ -114,6 +114,8 @@ public class MainPageObject {
                 .perform();
     }
 
+
+
     public void swipeUpQuick(){
         swipeUp(200);
     }

@@ -9,9 +9,9 @@ public class SearchPageObject extends MainPageObject {
     SEARCH_INIT_ELEMENT = "//*[contains(@text, 'Search Wikipedia')]",
     SEARCH_INIT_INPUT = "//*[contains(@text, 'Search Wikipedia')]",
     SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
-
-    SEARCH_ARROWBACK_BUTTON = "android.widget.ImageButton",
+    ARROWBACK_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']",
     SEARCH_RESULT_BY_STRING_OR_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='{STRING_OR_SUBSTRING}']";
+
 
 // забираем драйвер из MainPageObject
     public SearchPageObject(AppiumDriver android){
@@ -34,7 +34,7 @@ public class SearchPageObject extends MainPageObject {
 
     public void clickArrowButton(){
         this.waitForElementAndClick(
-                By.className(SEARCH_ARROWBACK_BUTTON),
+                By.xpath(ARROWBACK_BUTTON),
                 "не найдена стрелочка назад в поиске",
                 5
         );

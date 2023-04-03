@@ -111,6 +111,30 @@ public class FirstTests extends InitDriver {
     }
 
     @Test
+    public void amountOfSearchArticles(){
+        SearchPageObject searchPageObject = new SearchPageObject(android);
+
+        searchPageObject.initSearchInput();
+        String search_line = "linkin park";
+        searchPageObject.typeSearchLine(search_line);
+        int amountOfSearchResults = searchPageObject.getAmountOfSearchResults();
+        System.out.println(amountOfSearchResults);
+        Assertions.assertTrue(
+                amountOfSearchResults > 0,
+                "мы нашли слишком мало результатов"
+        );
+    }
+
+    @Test
+    public void testAmountOfEmptySearch(){
+        SearchPageObject searchPageObject = new SearchPageObject(android);
+        searchPageObject.initSearchInput();
+        String search_line = "zxcvasdf";
+        searchPageObject.typeSearchLine(search_line);
+        searchPageObject.assertWhenSearchIsEmpty(search_line);
+    }
+
+    @Test
     public void listTest() {
         mainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
@@ -169,63 +193,6 @@ public class FirstTests extends InitDriver {
         mainPageObject.waitForElementAndClick(
                 By.className("android.widget.ImageButton"),
                 "не найдена кнопка возвращения назад");
-    }
-
-
-
-
-
-    @Test
-    public void assertTest(){
-        String valueToStartSeach = "Search Wikipedia";
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, '" + valueToStartSeach +"')]"),
-                "не найден поиск");
-        String valueToSearchLine = "Linkin Park";
-        mainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, '" + valueToStartSeach + "')]"),
-                valueToSearchLine,
-                "Не удается ввести текст в поле ввода логина");
-        String searchResultLocator = "//*[@resource-id='org.wikipedia:id/search_results_list']/*/*[@resource-id='org.wikipedia:id/page_list_item_title']";
-        mainPageObject.waitForElementPresent(
-                By.xpath(searchResultLocator),
-                "не найден элемент в поиске " + valueToSearchLine,
-                15);
-
-        int amountOfSearchResults = mainPageObject.getAmounOfElements(
-                By.xpath(searchResultLocator));
-
-        System.out.println(amountOfSearchResults);
-
-        Assertions.assertTrue(
-                amountOfSearchResults > 0,
-                "мы нашли слишком мало результатов"
-        );
-    }
-
-    @Test
-    public void testAmountOfEmptySearch(){
-        String valueToStartSearch = "Search Wikipedia";
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, '" + valueToStartSearch +"')]"),
-                "не найден поиск");
-
-        String valueToSearchLine = "zxcvasdf";
-
-        mainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, '" + valueToStartSearch + "')]"),
-                valueToSearchLine,
-                "Не удается ввести текст в поле ввода логина");
-
-        String searchLocator = "//*[@resource-id='org.wikipedia:id/search_results_list']/*/*[@resource-id='org.wikipedia:id/results_text']";
-
-        mainPageObject.waitForElementPresent(
-                By.xpath(searchLocator),
-                "не удалось найти элемент для ожидания",
-                10
-        );
-
-        mainPageObject.assertElementWithOnePresent(By.xpath(searchLocator), "обнаружены элементы на странице по запросу " + valueToSearchLine);
     }
 
     @Test

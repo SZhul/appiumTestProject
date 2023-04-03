@@ -10,7 +10,9 @@ public class SearchPageObject extends MainPageObject {
     SEARCH_INIT_INPUT = "//*[contains(@text, 'Search Wikipedia')]",
     SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
     ARROWBACK_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']",
-    SEARCH_RESULT_BY_STRING_OR_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='{STRING_OR_SUBSTRING}']";
+    SEARCH_RESULT_BY_STRING_OR_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='{STRING_OR_SUBSTRING}']",
+    ALL_SEARCH_RESULTS = "//*[@resource-id='org.wikipedia:id/search_results_list']/*/*[@resource-id='org.wikipedia:id/page_list_item_title']",
+    EMPTY_SEARCH_RESULT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*/*[@resource-id='org.wikipedia:id/results_text']";
 
 
 // забираем драйвер из MainPageObject
@@ -91,6 +93,28 @@ public class SearchPageObject extends MainPageObject {
                 15
         );
     }
+
+    public int getAmountOfSearchResults(){
+        this.waitForElementPresent(
+                By.xpath(ALL_SEARCH_RESULTS),
+                "не найден элемент в поиске ",
+                15);
+        return this.getAmounOfElements(By.xpath(ALL_SEARCH_RESULTS));
+    }
+
+    public void waitForEmptyResultsLabel(){
+        this.waitForElementPresent(
+                By.xpath(EMPTY_SEARCH_RESULT),
+                "не удалось найти ничего в результатах поиска",
+                10
+        );
+    }
+
+    public void assertWhenSearchIsEmpty(String search_line){
+        this.assertElementWithOnePresent(By.xpath(EMPTY_SEARCH_RESULT), search_line, "но поиск обнаружил несколько элементов на странице ");
+    }
+
+
 
 
     /* TEMPLATE METHODS */

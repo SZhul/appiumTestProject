@@ -174,14 +174,23 @@ public class MainPageObject {
 // wiki, когда ничего не находит, выводит в поиске 1 строку с таким названием
 // если такой элемент найден, ассерт проходит, в остальных случаях выдаем ошибку
 
-
     public void assertElementWithOnePresent(By by, String error_message){
         int amountOfElements = getAmounOfElements(by);
         if(amountOfElements > 0 && getTextOfElement(by).equals("No results")){
             Assertions.assertEquals("No results", getTextOfElement(by));
         }
         else{
-            String default_message = "An element " + by.toString() + " supposed to be not present";
+            String default_message = "Элементов по поисковому запросу " + by.toString() + " не должно быть найдено в тесте";
+            throw new AssertionError(default_message + " " + error_message);
+        }
+    }
+    public void assertElementWithOnePresent(By by, String search_line, String error_message){
+        int amountOfElements = getAmounOfElements(by);
+        if(amountOfElements > 0 && getTextOfElement(by).equals("No results")){
+            Assertions.assertEquals("No results", getTextOfElement(by));
+        }
+        else{
+            String default_message = "Элементов по поисковому запросу " + search_line + " не должно быть найдено в тесте";
             throw new AssertionError(default_message + " " + error_message);
         }
     }

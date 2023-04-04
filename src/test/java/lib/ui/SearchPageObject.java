@@ -1,7 +1,11 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class SearchPageObject extends MainPageObject {
 
@@ -112,6 +116,14 @@ public class SearchPageObject extends MainPageObject {
 
     public void assertWhenSearchIsEmpty(String search_line){
         this.assertElementWithOnePresent(By.xpath(EMPTY_SEARCH_RESULT), search_line, "но поиск обнаружил несколько элементов на странице ");
+    }
+
+    public void assertWhenSearchIsNotEmpty(String search_line){
+        List<WebElement> elements = android.findElements(By.xpath(ALL_SEARCH_RESULTS));
+        System.out.println(elements.size());
+        for (WebElement e : elements) {
+            Assertions.assertTrue(e.getText().toLowerCase().contains(search_line.toLowerCase()), "message is " + e.getText());
+        }
     }
 
 

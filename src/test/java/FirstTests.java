@@ -136,18 +136,12 @@ public class FirstTests extends InitDriver {
 
     @Test
     public void listTest() {
-        mainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "не найден поиск");
-        mainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Java",
-                "Не удается ввести текст в поле ввода логина");
-        List<WebElement> elements = android.findElements(By.id("org.wikipedia:id/page_list_item_title"));
-        System.out.println(elements.size());
-        for (WebElement e : elements) {
-            Assertions.assertTrue(e.getText().toLowerCase().contains("java"), "message is " + e.getText());
-        }
+        SearchPageObject searchPageObject = new SearchPageObject(android);
+        searchPageObject.initSearchInput();
+        String search_line = "Java";
+        searchPageObject.typeSearchLine(search_line);
+        searchPageObject.getAmountOfSearchResults();
+        searchPageObject.assertWhenSearchIsNotEmpty(search_line);
     }
 
     @Test

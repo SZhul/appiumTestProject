@@ -206,6 +206,17 @@ public class MainPageObject {
         }
     }
 
+    public void assertElementWithSomePresent(By by, String error_message){
+        int amounOfElements = getAmounOfElements(by);
+        if(amounOfElements <= 1 && getTextOfElement(by).equals("No results")){
+            String default_message = "Элементы не найдены";
+            throw new AssertionError(default_message + " " + error_message);
+        }
+        else{
+            System.out.println("В поиск было найдено " + amounOfElements + " элементов");
+        }
+    }
+
     public String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeOutInSeconds){
         WebElement element = waitForElementPresent(by, error_message, timeOutInSeconds);
         return element.getAttribute(attribute);

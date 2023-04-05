@@ -41,6 +41,10 @@ public class ArticlePageObject extends MainPageObject {
                 6);
     }
 
+    public void swipeUp(){
+        this.swipeUp(500);
+    }
+
 
 
 
